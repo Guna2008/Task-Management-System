@@ -16,7 +16,7 @@ class Task(Base):
     id = Column(Integer,primary_key=True,index=True)
     title = Column(String)
     completed = Column(Boolean,default=False)
-    user_id = Column(Integer, ForeignKey("users.id"))
+    user_id = Column(Integer, ForeignKey("users.id"),nullable=False)
     owner= relationship("User",back_populates="tasks")
 
 
