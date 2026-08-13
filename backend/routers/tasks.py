@@ -11,46 +11,26 @@ router = APIRouter(
 )
 
 @router.get("/",response_model=list[TaskResponse])
-def get_tasks(
-    db: Session = Depends(get_db),
-    current_user: models.User = Depends(get_current_user)
-):
-    return db.query(models.Task).filter(
-        models.Task.user_id == current_user.id
-    ).all()
+def get_tasks(db: Session = Depends(get_db),current_user: models.User = Depends(get_current_user)):
+    
+    return db.query(models.Task).filter( models.Task.user_id == current_user.id).all()
 
 
 @router.get("/{task_id}",response_model=TaskResponse)
-def get_task(
-    task_id: int,
-    db: Session = Depends(get_db),
-    current_user: models.User = Depends(get_current_user)
-):
-    task = db.query(models.Task).filter(
-        models.Task.id == task_id,
-        models.Task.user_id == current_user.id
-    ).first()
+def get_task(task_id: int,db: Session = Depends(get_db),current_user: models.User = Depends(get_current_user)):
+
+    task = db.query(models.Task).filter(models.Task.id == task_id,models.Task.user_id == current_user.id).first()
 
     if task is None:
-        raise HTTPException(
-            status_code=404,
-            detail="Task not found"
-        )
+        raise HTTPException(status_code=404,detail="Task not found")
 
     return task
 
 
 @router.post("/",response_model=TaskResponse)
-def create_task(
-    task: Task,
-    db: Session = Depends(get_db),
-    current_user: models.User = Depends(get_current_user)
-):
-    new_task = models.Task(
-        title=task.title,
-        completed=task.completed,
-        user_id=current_user.id
-    )
+def create_task(task: Task,db: Session = Depends(get_db),current_user: models.User = Depends(get_current_user)):
+
+    new_task = models.Task(title=task.title,completed=task.completed,user_id=current_user.id)
 
     db.add(new_task)
     db.commit()
@@ -60,22 +40,12 @@ def create_task(
 
 
 @router.put("/{task_id}",response_model=TaskResponse)
-def update_task(
-    task_id: int,
-    task: Task,
-    db: Session = Depends(get_db),
-    current_user: models.User = Depends(get_current_user)
-):
-    existing_task = db.query(models.Task).filter(
-        models.Task.id == task_id,
-        models.Task.user_id == current_user.id
-    ).first()
+def update_task(task_id: int,task: Task,db: Session = Depends(get_db),current_user: models.User = Depends(get_current_user)):
+
+    existing_task = db.query(models.Task).filter(models.Task.id == task_id,models.Task.user_id == current_user.id).first()
 
     if existing_task is None:
-        raise HTTPException(
-            status_code=404,
-            detail="Task not found"
-        )
+        raise HTTPException(status_code=404,detail="Task not found")
 
     existing_task.title = task.title
     existing_task.completed = task.completed
@@ -87,21 +57,12 @@ def update_task(
 
 
 @router.delete("/{task_id}")
-def delete_task(
-    task_id: int,
-    db: Session = Depends(get_db),
-    current_user: models.User = Depends(get_current_user)
-):
-    removing_task = db.query(models.Task).filter(
-        models.Task.id == task_id,
-        models.Task.user_id == current_user.id
-    ).first()
+def delete_task(task_id: int,db: Session = Depends(get_db),current_user: models.User = Depends(get_current_user)):
+
+    removing_task = db.query(models.Task).filter(models.Task.id == task_id,models.Task.user_id == current_user.id).first()
 
     if removing_task is None:
-        raise HTTPException(
-            status_code=404,
-            detail="Task not found"
-        )
+        raise HTTPException(status_code=404,detail="Task not found")
 
     db.delete(removing_task)
     db.commit()
