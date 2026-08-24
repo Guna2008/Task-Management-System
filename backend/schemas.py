@@ -23,4 +23,4 @@ class TaskResponse(BaseModel):
     title:str
     completed:bool
 
-    model_config=ConfigDict(from_attribute=True)    
+    model_config=ConfigDict(from_attributes=True)    
