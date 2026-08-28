@@ -20,5 +20,5 @@ def verify_password(password:str, hashed_password:str):
 
 def create_access_token(data:dict):
     return jwt.encode(data,SECRET_KEY,algorithm=ALGORITHM)
-
+0212.
 
